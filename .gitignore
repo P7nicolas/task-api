@@ -3,3 +3,8 @@ __pycache__/
 .pytest_cache/
 *.pyc
 .env
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+*.tfstate
+*.tfstate.*

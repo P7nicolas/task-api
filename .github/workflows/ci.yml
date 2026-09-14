@@ -54,3 +54,18 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           docker push 229691749798.dkr.ecr.us-east-1.amazonaws.com/task-api:latest
+
+      - name: Fazer deploy na EC2
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          aws ssm send-command \
+            --instance-ids i-0de958fbb0c62a1e7 \
+            --document-name "AWS-RunShellScript" \
+            --parameters 'commands=[
+              "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 229691749798.dkr.ecr.us-east-1.amazonaws.com",
+              "docker pull 229691749798.dkr.ecr.us-east-1.amazonaws.com/task-api:latest",
+              "docker stop task-api || true",
+              "docker rm task-api || true",
+              "docker run -d --name task-api -p 5000:5000 229691749798.dkr.ecr.us-east-1.amazonaws.com/task-api:latest"
+            ]' \
+            --region us-east-1

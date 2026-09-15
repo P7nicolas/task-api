@@ -65,6 +65,7 @@ jobs:
               "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 229691749798.dkr.ecr.us-east-1.amazonaws.com",
               "cd /home/ssm-user",
               "docker compose pull",
+              "docker rm -f task-api || true",
               "docker compose up -d"
             ]' \
             --region us-east-1 \
@@ -75,11 +76,11 @@ jobs:
 
           aws ssm wait command-executed \
             --command-id "$COMMAND_ID" \
-            --instance-id i-0de958fbb0c62a1e7
+            --instance-id "i-0de958fbb0c62a1e7"
 
           STATUS=$(aws ssm get-command-invocation \
             --command-id "$COMMAND_ID" \
-            --instance-id i-0de958fbb0c62a1e7 \
+            --instance-id "i-0de958fbb0c62a1e7" \
             --query "Status" \
             --output text)
 

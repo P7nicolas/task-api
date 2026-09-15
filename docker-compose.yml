@@ -1,0 +1,12 @@
+services:
+  task-api:
+    image: 229691749798.dkr.ecr.us-east-1.amazonaws.com/task-api:latest
+    container_name: task-api
+    ports:
+      - "5000:5000"
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: us-east-1
+        awslogs-group: /task-api/app
+        awslogs-stream: task-api
